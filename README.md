@@ -21,6 +21,15 @@ and store data efficiently
   * __AWS API Gateway__: API endpoints for communication between the frontend and backend.
   * __Python__: Primary programming language.
   * __Visual Studio Code__: Code editor for development.
+    
+## Setup and Installation
+Follow these steps to set up the __Social Media Hashtag Trend Analyzer__  on your local environment and deploy it to the cloud:
+
+### Prerequisites
+  1. __AWS Account__: Ensure you have an active AWS account.
+  2. __Python Installed__: Install Python (3.8 or above) on your local machine
+  3. __Streamlit Installed__: Install Streamlit for the UI.
+  4. __IDE__: Use an IDE like Visual Studio Code for code editing.
 
 ## Component Details
   ### 1. Lambda Insert Function
