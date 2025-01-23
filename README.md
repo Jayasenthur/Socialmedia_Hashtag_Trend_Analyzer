@@ -1,18 +1,16 @@
 # Social Media Hashtag Trend Analyzer Application
 
 ## Project Description
-This project is a __Streamlit-based web application__ that allows users to compose and publish posts containing text and hashtags. It analyzes trending hashtags in real time and provides insights into popular topics. The backend integrates __AWS Lambda__, __API Gateway__, and __DynamoDB__ to process 
-and store data efficiently
+This project is a __Streamlit-based web application__ that allows users to compose and publish posts containing text and hashtags. It analyzes trending hashtags in real time and provides insights into popular topics. The backend integrates __AWS Lambda__, __API Gateway__, and __DynamoDB__ to process and store data efficiently. The user interface allows users to seamlessly engage with the application and stay informed about popular topics.
 
-## Workflow
-### Post submission :
-  * Users compose posts in the Streamlit app.
-  * The app sends the post to an API Gateway endpoint.
-  * AWS Lambda processes the post, extracts hashtags, and stores the data in DynamoDB.
+## Key Features
 
-### Trending Hashtags:
-  * Users can view trending hashtags by clicking the "Show Trending Hashtags" button.
-  * The app retrieves data from another API Gateway endpoint, which is powered by a Lambda function querying DynamoDB.
+1. __Post Composition__: Users can write posts with hashtags in a single text box.
+2. __Post Submission__: Posts are sent to AWS Lambda for processing.
+3. __AWS Lambda Integration__: Automatically extracts hashtags and stores them in DynamoDB.
+4. __Trending Hashtag Analysis__: Fetches and displays real-time trending hashtags.
+5. __Dynamic Updates__: Updates trending hashtags as new posts are submitted.
+6. __User-Friendly UI__: Built using Streamlit for a responsive and easy-to-use interface.
 
 ## Technologies Used
   * __Streamlit__: Frontend for the user interface.
