@@ -205,6 +205,67 @@ table = dynamodb.Table(table_name)
 * `table_name`: The name of the DynamoDB table where data will be stored.
 * `table = dynamodb.Table(table_name)`: Specifies the table object to perform operations like put_item.
 
+## 3. Hashtag Extraction
+```python
+def extract_hashtags(post_content):
+    return re.findall(r"#(\w+)", post_content)
+```
+* This function uses a regular expression #(\w+) to find all hashtags in the post content.
+   * `#`: Matches the hash symbol.
+   * `\w+`: Matches one or more alphanumeric characters or underscores.
+* It returns a list of hashtags found in the post.
+
+## 4. Main Handler Function
+The lambda_handler function is the entry point for your AWS Lambda function.
+
+### Request Parsing
+```python
+body = json.loads(event['body'])
+post_content = body.get('post_content', '').strip()
+```
+* event['body']: Extracts the request payload, typically sent as JSON.
+* body.get('post_content'): Retrieves the post_content key from the parsed JSON. If it’s missing, a default empty string is used.
+* .strip(): Removes leading and trailing whitespace.
+
+### Input Validation
+```python
+if not post_content:
+    raise ValueError("Post content is missing or empty.")
+```
+* Ensures that post_content is not empty. If it is, a ValueError is raised and caught in the exception block.
+
+### Generate Unique Post ID
+```python
+post_id = str(uuid.uuid4())
+```
+A unique ID for the post is generated using `uuid.uuid4()`. This ensures that each post is uniquely identifiable.
+
+### Hashtag Extraction and Validation
+```python
+hashtags = extract_hashtags(post_content)
+
+if not hashtags:
+    raise ValueError("No hashtags found in the post content.")
+```
+* Hashtags are extracted from the post content using the `extract_hashtags` function.
+* If no hashtags are found, a `ValueError` is raised.
+
+### Insert into DynamoDB
+```python
+for hashtag in hashtags:
+    item = {
+        'PostId': post_id,
+        'PostContent': post_content,
+        'Hashtag': hashtag
+    }
+    table.put_item(Item=item)
+```
+* Each hashtag is inserted into the DynamoDB table as a separate entry.
+* `PostId`: Acts as the partition key (unique identifier for the post).
+* `PostContent`: The original text of the post.
+* `Hashtag`: The extracted hashtag.
+
+
 ## 2. Lambda Fetch Function
 
 __Purpose__: Fetch and analyze trending hashtags from DynamoDB.
