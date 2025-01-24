@@ -181,8 +181,31 @@ def lambda_handler(event, context):
    * Click __Create__.
 3. Run the test by clicking __Test__ again and check the logs or response.
 
+## Explanation of Lambda insert function:
 
-### 2. Lambda Fetch Function
+## 1.  __Imports__
+```python
+import json
+import boto3
+import uuid
+import re
+```
+* `json`: Used to parse the incoming request body and format the response.
+* `boto3`: AWS SDK for Python, used here to interact with DynamoDB
+* `uuid`: Generates unique IDs for each post to ensure no conflicts in the DynamoDB table
+* `re`: A regular expression library used to extract hashtags from the post content
+
+## 2. DynamoDB Initialization
+```python
+dynamodb = boto3.resource('dynamodb')
+table_name = 'HashtagsTable'
+table = dynamodb.Table(table_name)
+```
+* `boto3.resource('dynamodb')`: Initializes a DynamoDB resource to interact with AWS DynamoDB.
+* `table_name`: The name of the DynamoDB table where data will be stored.
+* `table = dynamodb.Table(table_name)`: Specifies the table object to perform operations like put_item.
+
+## 2. Lambda Fetch Function
 
 __Purpose__: Fetch and analyze trending hashtags from DynamoDB.
 
@@ -251,7 +274,7 @@ def lambda_handler(event, context):
         }
 
 ```
-#### Test the Function :
+### Test the Function :
  1. At the top of the Lambda console, click on the __Test__ button.
     
  2. __Configure a Test Event__:
@@ -264,7 +287,7 @@ def lambda_handler(event, context):
    * Click __Create__.
 3. Run the test by clicking __Test__ again and check the logs or response.
 
-### 3. API Gateway Configuration
+## 3. API Gateway Configuration
 
 Here is a step-by-step guide to configure API Gateway for the endpoints __POST /processPost__ and __GET /trendingHashtags__ using __HTTP API__ in AWS:
 
@@ -380,7 +403,7 @@ Here is a step-by-step guide to create a table in DynamoDB using the AWS Managem
     * `PostContent` (String)
     * `Hashtags` (List)
    
-### 5. Streamlit App
+## 5. Streamlit App
 User-friendly interface for composing posts and viewing trending hashtags.
 
 __Code :__
