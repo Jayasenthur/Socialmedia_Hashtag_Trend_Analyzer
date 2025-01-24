@@ -549,11 +549,11 @@ streamlit run hashtag.py
 4. Test the Trending Hashtags Section:
   * Click Show Trending Hashtags.
   * Verify that trending hashtags are displayed, dynamically updating as new posts are submitted.
-5. Verify End-to-End Functionality
-  1. Compose a new post in the Streamlit app
-  2. Verify the post's data in DynamoDB using the AWS Management Console.
-  3. Check that the trending hashtags in the Streamlit app reflect the updates
-  4. Test for edge cases, such as
+## 5. Verify End-to-End Functionality
+1. Compose a new post in the Streamlit app
+2. Verify the post's data in DynamoDB using the AWS Management Console.
+3. Check that the trending hashtags in the Streamlit app reflect the updates
+4. Test for edge cases, such as
     * Submitting empty or invalid posts.
     * Posts with no hashtags.
     * Very large posts with multiple hashtags.
