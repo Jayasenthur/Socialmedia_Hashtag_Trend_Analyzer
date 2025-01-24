@@ -12,6 +12,13 @@ This project is a __Streamlit-based web application__ that allows users to compo
 5. __Dynamic Updates__: Updates trending hashtags as new posts are submitted.
 6. __User-Friendly UI__: Built using Streamlit for a responsive and easy-to-use interface.
 
+## Architecture Diagram
+
+Below is the architecture diagram for the Social Media Hashtag Trend Analyzer project:
+
+![Architecture Diagram](https://github.com/Jayasenthur/Socialmedia_Hashtag_Trend_Analyzer/blob/main/hashtag_dgm.jpg)
+
+
 ## Technologies Used
   * __Streamlit__: Frontend for the user interface.
   * __AWS Lambda__: Serverless backend functions for processing posts and fetching trending hashtags.
