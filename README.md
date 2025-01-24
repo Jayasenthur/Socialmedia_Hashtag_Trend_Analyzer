@@ -97,7 +97,7 @@ To interact with a DynamoDB table (for inserting and fetching data), you need th
     * Scroll down to the Function code section.
     * Under "Code source," click __Edit code inline__ to paste your Python code.
           
-  Code :
+  __Code :__
   
   ```python
 import json
@@ -251,7 +251,7 @@ def lambda_handler(event, context):
         }
 
 ```
-#### : Test the Function
+#### Test the Function :
  1. At the top of the Lambda console, click on the __Test__ button.
     
  2. __Configure a Test Event__:
@@ -456,11 +456,108 @@ if st.button("Show Trending Hashtags"):
         st.error(f"Error communicating with the API: {str(e)}")
 ```
 
-## How to Run the Project
-* Set up AWS resources (__Lambda__, __DynamoDB__, __API Gateway__).
-* Update the API Gateway URLs in the Streamlit app.
-* Run the Streamlit app using `streamlit run app.py`.
-* Access the app at http://localhost:8502.
+## Testing Instructions
+Follow these steps to test the functionality of the project after completing the setup and installation:
+
+## 1. Testing the Lambda Insert Function
+
+### Steps:
+1. Open the AWS Management Console.
+2. Navigate to __AWS Lambda__
+3. Select the Insert Function (`HashTagAnalysis_Insert`)
+4. Click __Test__ at the top of the page.
+5. Create a test event with the following payload:
+```json
+{
+    "post_content": "Learning #Streamlit and #Python is amazing!"
+}
+```
+6. Click __Save and Test__.
+7. Verify that:
+    * The Lambda function executes successfully.
+    * A new entry is added to the DynamoDB table `HashtagsTable`.
+    * The response returns a success message
+```json
+{
+    "statusCode": 200,
+    "body": "{\"message\": \"Data stored successfully\"}"
+}
+```
+
+## 2. Testing the Lambda Fetch Function
+
+1. Navigate to the AWS Management Console and open __Lambda__.
+2. Select the Insert Function (`HashTagAnalysis_Fetch`)
+4. Click __Test__ .
+5. Use an empty test event (no payload required) and run the function.
+6. Verify that :
+    * The Lambda function executes successfully.
+    * The response contains trending hashtags from the __DynamoDB table__.
+    * Example response:
+```json
+{
+    "statusCode": 200,
+    "body": "[{\"hashtag\": \"Streamlit\", \"count\": 5}, {\"hashtag\": \"Python\", \"count\": 3}]"
+}
+```
+## 3. Testing the API Gateway Endpoints
+### Testing the POST Endpoint (/processPost):
+1. Use a tool like Postman, curl, or the API Gateway Test Tool.
+2. Send a __POST__ request to your API Gateway endpoint:
+```php
+https://<api-id>.execute-api.<region>.amazonaws.com/post/processPost
+```
+3. Add the following payload in the request body
+```json
+{
+    "post_content": "Exploring #AWS and #DynamoDB!"
+}
+```
+4. Verify that:
+The response returns a success message :
+```json
+{
+    "message": "Data stored successfully"
+}
+```
+Testing the GET Endpoint (/`trendingHashtags`):
+
+1. Use Postman, curl, or the API Gateway Test Tool.
+2. Send a GET request to the following endpoint :
+```php
+https://<api-id>.execute-api.<region>.amazonaws.com/get/trendingHashtags
+```
+3. Verify that:
+* The response returns a list of trending hashtags with counts
+```json
+[
+    {"hashtag": "AWS", "count": 10},
+    {"hashtag": "DynamoDB", "count": 7}
+]
+```
+
+## 4. Testing the Streamlit Application
+1. Run the Streamlit app locally
+```bash
+streamlit run hashtag.py
+```
+2. Open the app in your browser (default URL: http://localhost:8501).
+3. Test the Post Composition
+  * Enter a post with hashtags (e.g., "Working on #Python and #AWS projects!").
+  * Click the Post button
+  * Verify that the post is successfully sent to the Lambda function and stored in DynamoDB.
+4. Test the Trending Hashtags Section:
+  * Click Show Trending Hashtags.
+  * Verify that trending hashtags are displayed, dynamically updating as new posts are submitted.
+5. Verify End-to-End Functionality
+  1. Compose a new post in the Streamlit app
+  2. Verify the post's data in DynamoDB using the AWS Management Console.
+  3. Check that the trending hashtags in the Streamlit app reflect the updates
+  4. Test for edge cases, such as
+    * Submitting empty or invalid posts.
+    * Posts with no hashtags.
+    * Very large posts with multiple hashtags.
+  
 
 
 
