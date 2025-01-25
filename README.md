@@ -265,7 +265,59 @@ for hashtag in hashtags:
 * `PostContent`: The original text of the post.
 * `Hashtag`: The extracted hashtag.
 
+### 5. Success Response
+```python
+return {
+    'statusCode': 200,
+    'body': json.dumps({'message': 'Post and hashtags inserted successfully!'}),
+    'headers': {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
+}
+```
+* Returns a success response with a 200 status code if all hashtags are inserted successfully.
 
+### Exception Handling
+```python
+except Exception as e:
+    return {
+        'statusCode': 500,
+        'body': json.dumps({'error': str(e)}),
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    }
+```
+* Any errors during execution (e.g., invalid input, DynamoDB issues) are caught here.
+* A 500 status code is returned, along with the error message.
+
+### Example Input and Output
+### Input 
+```python
+{
+    "post_content": "Exploring AWS Lambda! #AWS #Lambda #DynamoDB"
+}
+```
+
+### DynamoDB Entries Created
+
+The following table illustrates how data is stored in the DynamoDB table for each post:
+
+| **PostId**                           | **PostContent**                          | **Hashtag** |
+|--------------------------------------|------------------------------------------|-------------|
+| 123e4567-e89b-12d3-a456-426614174000 | Exploring AWS Lambda! #AWS #Lambda #DynamoDB | AWS         |
+| 123e4567-e89b-12d3-a456-426614174000 | Exploring AWS Lambda! #AWS #Lambda #DynamoDB | Lambda      |
+| 123e4567-e89b-12d3-a456-426614174000 | Exploring AWS Lambda! #AWS #Lambda #DynamoDB | DynamoDB    |
+
+### Output
+```python
+{
+    "statusCode": 200,
+    "body": "{\"message\": \"Post and hashtags inserted successfully!\"}"
+}
+```
 ## 2. Lambda Fetch Function
 
 __Purpose__: Fetch and analyze trending hashtags from DynamoDB.
