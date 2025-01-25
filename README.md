@@ -45,7 +45,7 @@ __Key Features__:
   * Generates a unique PostId for each submission.     
   * Stores both the post and extracted hashtags in DynamoDB.
 
-### Step-by-step guide to create a Lambda function in AWS:
+## Step-by-step guide to create a Lambda function in AWS:
 
 #### Step 1: Navigate to the Lambda Console
 1. Log in to the __AWS Management Console__.
@@ -65,7 +65,7 @@ __Key Features__:
      * __Create a new role with basic Lambda permissions__ (if you're starting fresh).
      * OR __Use an existing role__ (if you’ve already created a role with permissions for DynamoDB, etc.).
 
-### IAM Policies for Lambda Functions
+## IAM Policies for Lambda Functions
 1. Permissions for DynamoDB (Insert and Fetch Functions)
 To interact with a DynamoDB table (for inserting and fetching data), you need the following permissions:
 ```json
@@ -89,7 +89,7 @@ To interact with a DynamoDB table (for inserting and fetching data), you need th
 * `dynamodb:Scan`: Allows scanning the entire table to retrieve all records.
 * `Resource`: Restrict the permissions to a specific table by specifying its ARN.
 
-#### Steps to Attach IAM Policies to the Lambda Execution Role
+## Steps to Attach IAM Policies to the Lambda Execution Role
 1. Identify the Execution Role:
 
 #### Step 4: Write or Upload Code
@@ -399,6 +399,116 @@ def lambda_handler(event, context):
 ```
    * Click __Create__.
 3. Run the test by clicking __Test__ again and check the logs or response.
+
+## Explanation of Lambda Fetch function:
+
+### 1.  __Imports__
+```python
+import json
+import boto3
+from collections import Counter
+```
+* `json`: Used for formatting the input and output.
+* `boto3`: AWS SDK for Python, used to interact with DynamoDB.
+* `Counter`: From the collections module, used to count occurrences of hashtags.
+
+### 2. Initialize DynamoDB
+```python
+dynamodb = boto3.resource('dynamodb')
+table_name = 'HashtagsTable'  # Replace with your DynamoDB table name
+table = dynamodb.Table(table_name)
+```
+* Establishes a connection to the DynamoDB resource.
+* Specifies the table (`HashtagsTable`) from which data will be fetched.
+  
+### 3. Lambda Handler Function
+```python
+def lambda_handler(event, context):
+    try:
+        # Scan the DynamoDB table to retrieve all items
+        response = table.scan()
+        items = response.get('Items', [])
+```
+* __Purpose__: Scans the DynamoDB table to retrieve all records.
+* __Key Operation__: `table.scan()`
+    * Retrieves all data in the table (not efficient for very large datasets but works for this project).
+    * Extracts the list of items under the 'Items' key.
+ 
+### 4. Extract Hashtags
+```python
+hashtags = [item['Hashtag'] for item in items if 'Hashtag' in item]
+```
+* iterates through the retrieved items and extracts the `Hashtag` field for each record.
+* Ensures only records with a `Hashtag` field are considered.
+
+### 5. Handle No Hashtags
+```python
+if not hashtags:
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'trending_hashtags': []}),
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    }
+```
+* If no hashtags are found:
+    * Responds with an empty list for trending_hashtags
+
+### 6. Count and Sort Hashtags
+```python
+# Count occurrences of each hashtag
+hashtag_counts = Counter(hashtags)
+
+# Sort hashtags by count in descending order
+trending = sorted(hashtag_counts.items(), key=lambda x: x[1], reverse=True)
+```
+* Counting: Uses `Counter` to calculate how many times each hashtag appears.
+* Sorting: Arranges the hashtags in descending order of frequency.
+
+### 7. Format Response
+```python
+# Format the response (Top 10 trending hashtags)
+trending_hashtags = [{"Hashtag": tag, "count": count} for tag, count in trending[:10]]
+
+return {
+    'statusCode': 200,
+    'body': json.dumps({'trending_hashtags': trending_hashtags}),
+    'headers': {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
+}
+```
+* Top 10 Hashtags: Selects the top 10 trending hashtags with their counts.
+* Format: Converts the hashtags and counts into a list of dictionaries for easy readability.
+* Response: Returns a JSON-formatted response.
+  
+Example of the response:
+```python
+{
+    "trending_hashtags": [
+        {"Hashtag": "AWS", "count": 15},
+        {"Hashtag": "Lambda", "count": 10},
+        {"Hashtag": "DynamoDB", "count": 8}
+    ]
+}
+```
+### 8. Error Handling
+```python
+except Exception as e:
+    return {
+        'statusCode': 500,
+        'body': json.dumps({'error': str(e)}),
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    }
+```
+* Catches any exceptions and returns an error message.
+* Sets the HTTP status code to `500`.
 
 ## 3. API Gateway Configuration
 
