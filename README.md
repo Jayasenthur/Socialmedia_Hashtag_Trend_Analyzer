@@ -7,9 +7,10 @@ This project is a __Streamlit-based web application__ that allows users to compo
 
 1. __See Trending Hashtags__: Helps find out which hashtags are popular right now.
 2. __Learn New Tools__: Taught me how to use AWS, DynamoDB, and Streamlit.
-3. __Build Something Useful__: Created an app that works and solves a real problem.
+3. __Easy to Use__: The app is simple for anyone to post and see trending hashtags.
 4. __Practice Real-Time Data__: Learned how to handle and show live data updates.
 5. __Grow My Skills__: Improved my knowledge for a future in data engineering.
+6. __Cost-Effective Design__ : The project uses serverless tech, so it’s affordable and efficient.
 
 ## Key Features
 
@@ -322,6 +323,7 @@ for hashtag in hashtags:
 * `PostId`: Acts as the partition key (unique identifier for the post).
 * `PostContent`: The original text of the post.
 * `Hashtag`: The extracted hashtag.
+* `table.put_item(Item=item)` function in the AWS SDK for Python (Boto3) is used to insert a new item into an Amazon DynamoDB table or replace an existing item with the same primary key.
 
 ### 5. Success Response
 ```python
