@@ -1,10 +1,15 @@
 # Social Media Hashtag Trend Analyzer Application
 
 ## Project Description
-This project is a __Streamlit-based web application__ that allows users to compose and publish posts containing text and hashtags. It analyzes trending hashtags in real time and provides insights into popular topics. The backend integrates __AWS Lambda__, __API Gateway__, and __DynamoDB__ to process and store data efficiently. The user interface allows users to seamlessly engage with the application and stay informed about popular topics.
+This project is a __Streamlit-based web application__ that allows users to compose and publish posts containing text and hashtags. It analyzes trending hashtags in real time and provides insights into popular topics. The backend integrates __AWS Lambda__, __API Gateway__, and __DynamoDB__ to process and store data efficiently. It helps users see which hashtags are trending in real-time, making it useful for social media insights.
 
 ## Why this project?
-With the growing importance of social media, users often seek insights into trending topics. This project solves the problem of identifying and analyzing trending hashtags in real-time, offering users meaningful insights to engage with popular topics.
+
+1. __See Trending Hashtags__: Helps find out which hashtags are popular right now.
+2. __Learn New Tools__: Taught me how to use AWS, DynamoDB, and Streamlit.
+3. __Build Something Useful__: Created an app that works and solves a real problem.
+4. __Practice Real-Time Data__: Learned how to handle and show live data updates.
+5. __Grow My Skills__: Improved my knowledge for a future in data engineering.
 
 ## Key Features
 
