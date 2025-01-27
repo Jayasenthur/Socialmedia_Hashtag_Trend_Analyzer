@@ -730,10 +730,10 @@ import requests
 import json
 import uuid
 ```
-`streamlit`: Used for building the web app UI.
-`requests`: For making HTTP requests to the API Gateway endpoints.
-`json`: To handle JSON data for API communication.
-`uuid:` Not directly used in this code but typically used to generate unique identifiers (possibly for debugging or future use).
+* `streamlit`: Used for building the web app UI.
+* `requests`: For making HTTP requests to the API Gateway endpoints.
+* `json`: To handle JSON data for API communication.
+* `uuid:` Not directly used in this code but typically used to generate unique identifiers (possibly for debugging or future use).
 
 ### 2. API URLs
 ```python
@@ -944,6 +944,14 @@ streamlit run hashtag.py
     * Posts with no hashtags.
     * Very large posts with multiple hashtags.
 
+
+## Challenges Faced
+
+* Setting up the backend processing using AWS Lambda.
+* Python functions and connect them to DynamoDB.
+* Testing the API Gateway integration.
+* Testing each component.
+  
 ## Project Benefits
 
 * Provides real-time insights into trending topics.
