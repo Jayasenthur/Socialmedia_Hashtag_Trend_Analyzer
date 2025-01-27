@@ -41,11 +41,13 @@ Walk through the project workflow step by step:
   * The Streamlit app displays the trending hashtags in real-time, sorted by frequency.
 
 ## Technologies Used
-  * __Streamlit__: Frontend for the user interface.
-  * __AWS Lambda__: Serverless backend functions for processing posts and fetching trending hashtags.
-  * __AWS DynamoDB__: NoSQL database for storing posts and hashtags.
-  * __AWS API Gateway__: API endpoints for communication between the frontend and backend.
-  * __Python__: Primary programming language.
+  * __Streamlit__: Provides a simple and user-friendly web interface for users to write posts and view trending hashtags.
+  * __AWS Lambda__: Handles backend processing.
+      * __Insert Function__: Parses and stores hashtags from user posts in DynamoDB.
+      * __Fetch Function__: Analyzes stored hashtags and calculates trending ones.
+  * __AWS DynamoDB__: NoSQL database for storing posts and hashtags, ensuring scalability and fast querying..
+  * __AWS API Gateway__: Serves as the bridge between the front-end and backend Lambda functions.
+  * __Python__: The primary programming language for both the Streamlit app and Lambda functions.
   * __Visual Studio Code__: Code editor for development.
     
 ## Setup and Installation
