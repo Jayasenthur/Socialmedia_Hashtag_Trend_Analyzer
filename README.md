@@ -3,14 +3,18 @@
 ## Project Description
 This project is a __Streamlit-based web application__ that allows users to compose and publish posts containing text and hashtags. It analyzes trending hashtags in real time and provides insights into popular topics. The backend integrates __AWS Lambda__, __API Gateway__, and __DynamoDB__ to process and store data efficiently. The user interface allows users to seamlessly engage with the application and stay informed about popular topics.
 
+## Why this project?
+With the growing importance of social media, users often seek insights into trending topics. This project solves the problem of identifying and analyzing trending hashtags in real-time, offering users meaningful insights to engage with popular topics.
+
 ## Key Features
 
 1. __Post Composition__: Users can write posts with hashtags in a single text box.
-2. __Post Submission__: Posts are sent to AWS Lambda for processing.
+2. __Post Submission__: Posts are sent to AWS Lambda for backend processing.
 3. __AWS Lambda Integration__: Automatically extracts hashtags and stores them in DynamoDB.
-4. __Trending Hashtag Analysis__: Fetches and displays real-time trending hashtags.
-5. __Dynamic Updates__: Updates trending hashtags as new posts are submitted.
-6. __User-Friendly UI__: Built using Streamlit for a responsive and easy-to-use interface.
+4. __Hashtag Extraction__: Hashtags are automatically identified and processed.
+5. __Trending Hashtag Analysis__: Fetches and displays the top 10 most frequently used hashtags dynamically.
+6. __Real-Time Updates__: As new posts are submitted, the trending hashtags are updated instantly..
+7. __User-Friendly UI__: Streamlit ensures simplicity and ease of use.
 
 ## Architecture Diagram
 
@@ -18,6 +22,23 @@ Below is the architecture diagram for the Social Media Hashtag Trend Analyzer pr
 
 ![Architecture Diagram](https://github.com/Jayasenthur/Socialmedia_Hashtag_Trend_Analyzer/blob/main/hashtag_dgm.jpg)
 
+## 4. Workflow Explanation
+Walk through the project workflow step by step:
+
+### 1. User Interaction:
+  * A user writes a post containing hashtags (e.g., "Learning #Python is fun!") in the Streamlit app.
+  * On clicking "Post," the content is sent to the backend via the API Gateway.
+    
+### 2. Backend Processing:
+  * The __Insert Lambda function__ extracts hashtags from the post and stores them in a DynamoDB table.
+  * __DynamoDB__ maintains all posts and hashtags efficiently.
+    
+### 3. Trending Hashtags:   
+  * When the user clicks "Show Trending Hashtags," a request is sent to the __Fetch Lambda function__ via the API Gateway.
+  * The function analyzes stored hashtags, calculates their frequency using Python's `collections.Counter`, and returns the top 10 trending hashtags.
+
+### 4. Display Results:
+  * The Streamlit app displays the trending hashtags in real-time, sorted by frequency.
 
 ## Technologies Used
   * __Streamlit__: Frontend for the user interface.
@@ -47,15 +68,15 @@ __Key Features__:
 
 ## Step-by-step guide to create a Lambda function in AWS:
 
-#### Step 1: Navigate to the Lambda Console
+### Step 1: Navigate to the Lambda Console
 1. Log in to the __AWS Management Console__.
 2. Search for Lambda in the search bar and click on Lambda under "Services."
 
-#### Step 2: Create a New Lambda Function
+### Step 2: Create a New Lambda Function
 1. In the Lambda console, click on the __Create function__ button.
 2. Select the __Author from scratch__ option.
 
-#### Step 3: Configure the Function
+### Step 3: Configure the Function
 1. Basic Information:
      __Function name__: Provide a unique name for your function (e.g., HashtagInsertFunction).
      __Runtime__: Choose the programming language you’ll use (e.g., Python 3.x).
@@ -92,7 +113,7 @@ To interact with a DynamoDB table (for inserting and fetching data), you need th
 ## Steps to Attach IAM Policies to the Lambda Execution Role
 1. Identify the Execution Role:
 
-#### Step 4: Write or Upload Code
+### Step 4: Write or Upload Code
  1. Inline Editor:
     * Scroll down to the Function code section.
     * Under "Code source," click __Edit code inline__ to paste your Python code.
@@ -165,10 +186,10 @@ def lambda_handler(event, context):
         }
       
    ```
-#### Step 5: Save and Deploy
+### Step 5: Save and Deploy
  1. Click on __Deploy__ at the top right to save your changes.
 
-#### Step 6: Test the Function
+### Step 6: Test the Function
  1. At the top of the Lambda console, click on the __Test__ button.
     
  2. __Configure a Test Event__:
@@ -514,7 +535,7 @@ except Exception as e:
 
 Here is a step-by-step guide to configure API Gateway for the endpoints __POST /processPost__ and __GET /trendingHashtags__ using __HTTP API__ in AWS:
 
-#### Step 1: Create an HTTP API
+### Step 1: Create an HTTP API
 
 1. Go to the __API Gateway__ console.
 2. Click __Create API > HTTP API__.
@@ -522,8 +543,8 @@ Here is a step-by-step guide to configure API Gateway for the endpoints __POST /
 4. Provide a name for your API (e.g., `HashtagAPI`).
 5. Click __Next__ and then __Create__.
 
-#### Step 2: Add Routes
-#### Add POST /`processPost` Route
+### Step 2: Add Routes
+### Add POST /`processPost` Route
 1. In your API dashboard, click __Routes__ in the left-hand menu.
 2. Click __Create__
 3. Enter the route as:
@@ -531,13 +552,13 @@ Here is a step-by-step guide to configure API Gateway for the endpoints __POST /
     * __Method__: `POST`
 4. Click __Create__ Route
 
-#### Add GET /`trendingHashtags` Route
+### Add GET /`trendingHashtags` Route
 1. Repeat the steps above, but
     * __Resource path__: /`trendingHashtags`
     * __Method__: `GET`
 2. Click __Create__ Route
 
-#### Step 3: Attach Lambda Integrations
+### Step 3: Attach Lambda Integrations
 For each route, link it to the appropriate Lambda function.
 
 1. Click on the __POST__ /`processPost` route in the Routes list.
@@ -547,18 +568,18 @@ For each route, link it to the appropriate Lambda function.
 5. Under __Lambda function__, select the Lambda function responsible for processing posts (e.g., `ProcessPostFunction`).
 6. Click __Create__.
 
-#### Attach Lambda to GET /trendingHashtags:
+### Attach Lambda to GET /trendingHashtags:
 1. Click on the `GET /trendingHashtags` route in the Routes list.
 2. Repeat the same process as above, but select the Lambda function responsible for fetching trending hashtags (e.g., `TrendingHashtagsFunction`).
 
-#### Step 4: Deploy the API
+### Step 4: Deploy the API
 1. In the left-hand menu, click __Deployments__.
 2. Click __Create__
 3. Choose a stage name, such as `prod` or `dev`.
 4. Click __Deploy__.
 
-#### Step 5: Test the API
-#### POST /processPost
+### Step 5: Test the API
+### POST /processPost
 
 1. Use a tool like __Postman__ or your Streamlit app.
 2. URL: `https://<your-api-id>.execute-api.<region>.amazonaws.com/processPost`
@@ -570,22 +591,22 @@ For each route, link it to the appropriate Lambda function.
 }
 
 ```
-#### GET /trendingHashtags
+### GET /trendingHashtags
 1. Use __Postman__ or a browser.
 2. URL: `https://<your-api-id>.execute-api.<region>.amazonaws.com/trendingHashtags`
 3. Method: `GET`.
 
-### 4. DynamoDB Table Creation
+## 4. DynamoDB Table Creation
 Here is a step-by-step guide to create a table in DynamoDB using the AWS Management Console:
 
-#### Step 1: Navigate to DynamoDB
+### Step 1: Navigate to DynamoDB
 1. Log in to your AWS Management Console.
 2. In the search bar at the top, type __DynamoDB__ and select it.
 
-#### Step 2: Create a New Table
+### Step 2: Create a New Table
 1. On the DynamoDB dashboard, click Create table.
 
-#### Step 3: Define Table Details
+### Step 3: Define Table Details
 1. Table name: Enter the name of your table (e.g., `HashtagsTable`).
 2. __Partition key (Primary key)__
    * Enter a key name (e.g.,`PostId`)
@@ -593,11 +614,11 @@ Here is a step-by-step guide to create a table in DynamoDB using the AWS Managem
 3. __Sort key (Optional)__: If you need a composite key (e.g., to store multiple hashtags for a post), you can define a __Sort key__.
    * Example: `Hashtags` (Type: String).
 
-#### Step 4: Create the Table
+## Step 4: Create the Table
 1. Click __Create table__.
 2. Wait for the table status to change from __Creating__ to __Active__ (this might take a few seconds).
 
-#### Step 5: Add Items to Your Table
+### Step 5: Add Items to Your Table
 1. On the table's Overview page, click __Explore items__.
 2. Click __Create item__.
 3. Enter values for the partition key and any other attributes:
@@ -611,7 +632,7 @@ Here is a step-by-step guide to create a table in DynamoDB using the AWS Managem
 ```
 4. Click __Create item__ to save the entry.
 
-### Example Table Schema for the Hashtag Application:
+## Example Table Schema for the Hashtag Application:
 
 | Attribute Name | Key Type       | Data Type |
 |----------------|---------------|-----------|
@@ -922,7 +943,14 @@ streamlit run hashtag.py
     * Submitting empty or invalid posts.
     * Posts with no hashtags.
     * Very large posts with multiple hashtags.
-  
+
+## Project Benefits
+
+* Provides real-time insights into trending topics.
+* Demonstrates a practical use case of serverless architecture with __AWS__.
+* Offers scalability and efficiency through __DynamoDB__ and __Lambda__.
+* Simplifies user interaction with a clean __Streamlit UI__.
+
 
 
 
