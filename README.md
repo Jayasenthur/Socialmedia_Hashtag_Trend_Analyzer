@@ -783,8 +783,8 @@ import uuid
 insert_post_api_url = 'https://hvrbau1nj1.execute-api.us-east-1.amazonaws.com/prod/processPost'
 fetch_post_api_url = 'https://hvrbau1nj1.execute-api.us-east-1.amazonaws.com/dev/trendingHashtags'
 ```
-* These variables define the URLs for API Gateway endpoints.
-* Replace with your actual API Gateway URLs if they change.
+* The URL `insert_post_api_url`  where the app sends posts to store them in a database (via AWS Lambda).
+* The URL fetch_post_api_url where the app fetches trending hashtags from the database. (via AWS Lambda).
 
 ### 3. App Title
 ```python
