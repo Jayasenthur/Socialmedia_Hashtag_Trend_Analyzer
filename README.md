@@ -183,7 +183,7 @@ def lambda_handler(event, context):
 
 ## Explanation of Lambda insert function:
 
-## 1.  __Imports__
+### 1.  __Imports__
 ```python
 import json
 import boto3
@@ -195,7 +195,7 @@ import re
 * `uuid`: Generates unique IDs for each post to ensure no conflicts in the DynamoDB table
 * `re`: A regular expression library used to extract hashtags from the post content
 
-## 2. DynamoDB Initialization
+### 2. DynamoDB Initialization
 ```python
 dynamodb = boto3.resource('dynamodb')
 table_name = 'HashtagsTable'
@@ -205,7 +205,7 @@ table = dynamodb.Table(table_name)
 * `table_name`: The name of the DynamoDB table where data will be stored.
 * `table = dynamodb.Table(table_name)`: Specifies the table object to perform operations like put_item.
 
-## 3. Hashtag Extraction
+### 3. Hashtag Extraction
 ```python
 def extract_hashtags(post_content):
     return re.findall(r"#(\w+)", post_content)
@@ -215,7 +215,7 @@ def extract_hashtags(post_content):
    * `\w+`: Matches one or more alphanumeric characters or underscores.
 * It returns a list of hashtags found in the post.
 
-## 4. Main Handler Function
+### 4. Main Handler Function
 The lambda_handler function is the entry point for your AWS Lambda function.
 
 ### Request Parsing
@@ -701,7 +701,126 @@ if st.button("Show Trending Hashtags"):
     except requests.exceptions.RequestException as e:
         st.error(f"Error communicating with the API: {str(e)}")
 ```
+## Code Explanation 
+### 1. Importing Libraries
+```python
+import streamlit as st
+import requests
+import json
+import uuid
+```
+`streamlit`: Used for building the web app UI.
+`requests`: For making HTTP requests to the API Gateway endpoints.
+`json`: To handle JSON data for API communication.
+`uuid:` Not directly used in this code but typically used to generate unique identifiers (possibly for debugging or future use).
 
+### 2. API URLs
+```python
+insert_post_api_url = 'https://hvrbau1nj1.execute-api.us-east-1.amazonaws.com/prod/processPost'
+fetch_post_api_url = 'https://hvrbau1nj1.execute-api.us-east-1.amazonaws.com/dev/trendingHashtags'
+```
+* These variables define the URLs for API Gateway endpoints.
+* Replace with your actual API Gateway URLs if they change.
+
+### 3. App Title
+```python
+st.title("Social Media Post Analyzer")
+```
+* Displays the title of the application at the top of the page.
+### 4. Post Composition Section
+```python
+st.header("Compose a Post")
+post_content = st.text_area("Write your post with hashtags here (e.g., Learning #Python is fun!)")
+```
+* Adds a header (Compose a Post) and a text area for users to input posts containing hashtags.
+
+### 5. Submit Post Button
+```python
+if st.button("Post"):
+    if post_content.strip():
+        payload = {'post_content': post_content}
+        headers = {'Content-Type': 'application/json'}
+```
+* Adds a "Post" button for submitting posts.
+* Validation: Ensures the post content is not empty (post_content.strip()).
+* Prepares the payload (post content as JSON) and sets headers for the API request.
+
+### 6. Submit Post API Request
+```python
+try:
+    # Send POST request to the API Gateway endpoint
+    response = requests.post(insert_post_api_url, data=json.dumps(payload), headers=headers)
+
+    if response.status_code == 200:
+        response_data = response.json()
+        st.success("Post submitted successfully!")
+    else:
+        try:
+            error_message = response.json().get('error', response.text)
+        except json.JSONDecodeError:
+            error_message = response.text
+        st.error(f"Failed to submit post: {error_message}")
+except requests.exceptions.RequestException as e:
+    st.error(f"Error communicating with the API: {str(e)}")
+```
+* __API Call__: Sends a POST request to insert_post_api_url with the post content.
+* __Response Handling__:
+  * If successful (status_code == 200), displays a success message.
+  * If not, parses and displays the error message from the response.
+* __Exception Handling__: Catches any issues during the API communication, such as connection errors.
+
+### 7. Trending Hashtags Section
+```python
+st.header("Trending Hashtags")
+```
+* Adds a header for the trending hashtags section.
+
+### 8. Show Trending Hashtags Button
+```python
+if st.button("Show Trending Hashtags"):
+    try:
+        # Fetch trending hashtags from the API Gateway endpoint
+        trending_response = requests.get(fetch_post_api_url)
+```
+* Adds a "Show Trending Hashtags" button.
+* Sends a GET request to the fetch_post_api_url to retrieve trending hashtags.
+
+### 9. Handle Trending Hashtags Response
+```python
+if trending_response.status_code == 200:
+    try:
+        hashtags = trending_response.json().get("trending_hashtags", [])
+    except json.JSONDecodeError:
+        st.error("Error parsing response from the server.")
+        hashtags = []
+```
+* Parses the API response:
+   * If successful, retrieves the trending_hashtags field from the response JSON.
+   * Handles parsing errors gracefully with an error message.
+
+### 10. Display Trending Hashtags
+```python
+if hashtags:
+    st.write("### Current Trending Hashtags")
+    for item in hashtags:
+        st.write(f"#{item['Hashtag']}: {item['count']} mentions")
+else:
+    st.write("No trending hashtags found.")
+```
+* Displays the top trending hashtags along with their mention counts.
+* If no hashtags are found, shows a fallback message.
+
+### 11. Handle Errors
+```python
+else:
+    st.error(f"Failed to fetch trending hashtags: {trending_response.text}")
+except requests.exceptions.RequestException as e:
+    st.error(f"Error communicating with the API: {str(e)}")
+```
+* Displays appropriate error messages if:
+    * The API request fails.
+    * An exception occurs during communication.
+      
 ## Testing Instructions
 Follow these steps to test the functionality of the project after completing the setup and installation:
 
