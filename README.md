@@ -85,8 +85,8 @@ __Key Features__:
 
 ### Step 3: Configure the Function
 1. Basic Information:
-     __Function name__: Provide a unique name for your function (e.g., HashtagInsertFunction).
-     __Runtime__: Choose the programming language you’ll use (e.g., Python 3.x).
+     * __Function name__: Provide a unique name for your function (e.g., HashtagInsertFunction).
+     * __Runtime__: Choose the programming language you’ll use (e.g., Python 3.x).
 
 2. __Role__ :
     Choose the execution role for the Lambda function:
