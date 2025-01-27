@@ -51,7 +51,7 @@ Walk through the project workflow step by step:
   * __Visual Studio Code__: Code editor for development.
     
 ## Setup and Installation
-Follow these steps to set up the __Social Media Hashtag Trend Analyzer__  on your local environment and deploy it to the cloud:
+Follow these steps to set up the __Social Media Hashtag Trend Analyzer__  on local environment and deploy it to the cloud:
 
 ### Prerequisites
   1. __AWS Account__: Ensure you have an active AWS account.
@@ -112,8 +112,38 @@ To interact with a DynamoDB table (for inserting and fetching data), you need th
 * `dynamodb:Scan`: Allows scanning the entire table to retrieve all records.
 * `Resource`: Restrict the permissions to a specific table by specifying its ARN.
 
-## Steps to Attach IAM Policies to the Lambda Execution Role
-1. Identify the Execution Role:
+### Steps to Attach IAM Policies to the Lambda Execution Role
+#### 1. Open the AWS Management Console
+Navigate to the IAM Console.
+
+#### 2. Find the Lambda Execution Role
+1. In the IAM Console, click on Roles in the left sidebar.
+2. Locate the execution role associated with Lambda function:
+   * The role name usually follows this pattern: `lambda-role-[your-lambda-function-name]-....`
+   * If unsure, go to the __Lambda Console__, select ther function, and check the __Execution Role__ under the "Configuration" tab.
+#### 3. Edit the Role
+1. Click on the role name to open its details page.
+2. Navigate to the __Permissions__ tab.
+
+#### 4. Attach an IAM Policy
+1. Click the __Attach policies__ button.
+2. Search for the required policies using the search bar or browse from the list. Examples of common policies include:
+   * __AWSLambdaBasicExecutionRole__: Allows Lambda to write logs to CloudWatch.
+   * __AmazonDynamoDBFullAccess__ or __AmazonDynamoDBReadOnlyAccess__: Grants access to DynamoDB tables.
+   * __AmazonS3FullAccess__: If the function needs access to S3 buckets.
+3. Check the box next to the policies you want to attach.
+
+#### 5. Review and Save
+1. Click __Attach policy__ to apply the changes.
+2. The selected policies are now attached to the role.
+
+#### 6. Verify Policy Permissions
+1. Under the __Permissions__ tab, review the newly added policies.
+2. Ensure that all required permissions (e.g., for DynamoDB, CloudWatch, or S3) are included.
+
+
+#### 7. Test the Lambda Function
+After attaching the policies, test the Lambda function to confirm that it can perform the intended actions (e.g., read/write to DynamoDB)
 
 ### Step 4: Write or Upload Code
  1. Inline Editor:
