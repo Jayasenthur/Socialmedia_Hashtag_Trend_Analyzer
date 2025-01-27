@@ -237,7 +237,7 @@ def extract_hashtags(post_content):
 * It returns a list of hashtags found in the post.
 
 ### 4. Main Handler Function
-The lambda_handler function is the entry point for your AWS Lambda function.
+The lambda_handler function is the entry point for AWS Lambda function.
 
 ### Request Parsing
 ```python
