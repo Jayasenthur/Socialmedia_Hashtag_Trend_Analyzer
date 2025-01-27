@@ -66,7 +66,60 @@ Follow these steps to set up the __Social Media Hashtag Trend Analyzer__  on loc
   4. __IDE__: Use an IDE like Visual Studio Code for code editing.
 
 ## Component Details
-  ### 1. Lambda Insert Function
+
+## 1. DynamoDB Table Creation
+Here is a step-by-step guide to create a table in DynamoDB using the AWS Management Console:
+
+### Step 1: Navigate to DynamoDB
+1. Log in to your AWS Management Console.
+2. In the search bar at the top, type __DynamoDB__ and select it.
+
+### Step 2: Create a New Table
+1. On the DynamoDB dashboard, click Create table.
+
+### Step 3: Define Table Details
+1. Table name: Enter the name of your table (e.g., `HashtagsTable`).
+2. __Partition key (Primary key)__
+   * Enter a key name (e.g.,`PostId`)
+   * Select the data type for the partition key (e.g., `String`).
+3. __Sort key (Optional)__: If you need a composite key (e.g., to store multiple hashtags for a post), you can define a __Sort key__.
+   * Example: `Hashtags` (Type: String).
+
+## Step 4: Create the Table
+1. Click __Create table__.
+2. Wait for the table status to change from __Creating__ to __Active__ (this might take a few seconds).
+
+### Step 5: Add Items to Your Table
+1. On the table's Overview page, click __Explore items__.
+2. Click __Create item__.
+3. Enter values for the partition key and any other attributes:
+    * Example :
+ ```json
+ {
+  "PostId": "12345",
+  "Hashtags": "#Python",
+  "PostContent": "Learning Python is fun!"
+}
+```
+4. Click __Create item__ to save the entry.
+
+## Example Table Schema for the Hashtag Application:
+
+| Attribute Name | Key Type       | Data Type |
+|----------------|---------------|-----------|
+| PostId        | Partition Key | String    |
+| Hashtags        | Attribute     | String    |
+| PostContent           | Attribute     | String    |
+
+* __Table Name__ :`HashtagsTable`
+* __Primary Key__: `PostId`
+* __Attributes__:
+    * `PostId` (String)
+    * `PostContent` (String)
+    * `Hashtags` (List)
+  
+  
+  ### 2. Lambda Insert Function
  __Purpose__ : Process posts submitted by users, extract hashtags, and store them in DynamoDB.
   
 __Key Features__: 
@@ -579,7 +632,7 @@ Here is a step-by-step guide to configure API Gateway for the endpoints __POST /
 1. Go to the __API Gateway__ console.
 2. Click __Create API > HTTP API__.
 3. Select __Build__ under __HTTP API__.
-4. Provide a name for your API (e.g., `HashtagAPI`).
+4. Provide a name for your API (e.g., `SocialMediaAPI`).
 5. Click __Next__ and then __Create__.
 
 ### Step 2: Add Routes
@@ -604,12 +657,12 @@ For each route, link it to the appropriate Lambda function.
 2. Under __Integration__, click __Attach integration__.
 3. Select __Create and attach an integration__.
 4. Choose __Lambda function__.
-5. Under __Lambda function__, select the Lambda function responsible for processing posts (e.g., `ProcessPostFunction`).
+5. Under __Lambda function__, select the Lambda function responsible for processing posts (e.g., `HashTagAnalysis_Insert`).
 6. Click __Create__.
 
 ### Attach Lambda to GET /trendingHashtags:
 1. Click on the `GET /trendingHashtags` route in the Routes list.
-2. Repeat the same process as above, but select the Lambda function responsible for fetching trending hashtags (e.g., `TrendingHashtagsFunction`).
+2. Repeat the same process as above, but select the Lambda function responsible for fetching trending hashtags (e.g., `HashTagAnalysis_Fetch`).
 
 ### Step 4: Deploy the API
 1. In the left-hand menu, click __Deployments__.
@@ -635,56 +688,7 @@ For each route, link it to the appropriate Lambda function.
 2. URL: `https://<your-api-id>.execute-api.<region>.amazonaws.com/trendingHashtags`
 3. Method: `GET`.
 
-## 4. DynamoDB Table Creation
-Here is a step-by-step guide to create a table in DynamoDB using the AWS Management Console:
 
-### Step 1: Navigate to DynamoDB
-1. Log in to your AWS Management Console.
-2. In the search bar at the top, type __DynamoDB__ and select it.
-
-### Step 2: Create a New Table
-1. On the DynamoDB dashboard, click Create table.
-
-### Step 3: Define Table Details
-1. Table name: Enter the name of your table (e.g., `HashtagsTable`).
-2. __Partition key (Primary key)__
-   * Enter a key name (e.g.,`PostId`)
-   * Select the data type for the partition key (e.g., `String`).
-3. __Sort key (Optional)__: If you need a composite key (e.g., to store multiple hashtags for a post), you can define a __Sort key__.
-   * Example: `Hashtags` (Type: String).
-
-## Step 4: Create the Table
-1. Click __Create table__.
-2. Wait for the table status to change from __Creating__ to __Active__ (this might take a few seconds).
-
-### Step 5: Add Items to Your Table
-1. On the table's Overview page, click __Explore items__.
-2. Click __Create item__.
-3. Enter values for the partition key and any other attributes:
-    * Example :
- ```json
- {
-  "item_id": "12345",
-  "hashtag": "#Python",
-  "text": "Learning Python is fun!"
-}
-```
-4. Click __Create item__ to save the entry.
-
-## Example Table Schema for the Hashtag Application:
-
-| Attribute Name | Key Type       | Data Type |
-|----------------|---------------|-----------|
-| PostId        | Partition Key | String    |
-| Hashtags        | Attribute     | String    |
-| PostContent           | Attribute     | String    |
-
-* __Table Name__ :`HashtagsTable`
-* __Primary Key__: `PostId`
-* __Attributes__:
-    * `PostId` (String)
-    * `PostContent` (String)
-    * `Hashtags` (List)
    
 ## 5. Streamlit App
 User-friendly interface for composing posts and viewing trending hashtags.
@@ -912,10 +916,15 @@ Follow these steps to test the functionality of the project after completing the
 ## 2. Testing the Lambda Fetch Function
 
 1. Navigate to the AWS Management Console and open __Lambda__.
-2. Select the Insert Function (`HashTagAnalysis_Fetch`)
+2. Select the Fetch Function (`HashTagAnalysis_Fetch`)
 4. Click __Test__ .
-5. Use an empty test event (no payload required) and run the function.
-6. Verify that :
+5. create an test event with the following payload:
+```json
+{
+"body": "{\"post_content\": \"Learning #Streamlit and #Python is amazing!\"}"
+}
+```
+7. Verify that :
     * The Lambda function executes successfully.
     * The response contains trending hashtags from the __DynamoDB table__.
     * Example response:
