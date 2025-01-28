@@ -189,7 +189,7 @@ Navigate to the IAM Console.
 2. Search for the required policies using the search bar or browse from the list. Examples of common policies include:
    * __AWSLambdaBasicExecutionRole__: Allows Lambda to write logs to CloudWatch.
    * __AmazonDynamoDBFullAccess__ or __AmazonDynamoDBReadOnlyAccess__: Grants access to DynamoDB tables.
-   * __AmazonS3FullAccess__: If the function needs access to S3 buckets.
+   
 3. Check the box next to the policies you want to attach.
 
 #### 5. Review and Save
