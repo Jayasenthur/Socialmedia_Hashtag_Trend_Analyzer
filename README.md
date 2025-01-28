@@ -119,7 +119,7 @@ Here is a step-by-step guide to create a table in DynamoDB using the AWS Managem
     * `Hashtags` (List)
   
   
-  ### 2. Lambda Insert Function
+## 2. Lambda Insert Function
  __Purpose__ : Process posts submitted by users, extract hashtags, and store them in DynamoDB.
   
 __Key Features__: 
