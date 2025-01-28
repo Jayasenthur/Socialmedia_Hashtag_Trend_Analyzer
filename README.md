@@ -22,6 +22,16 @@ This project is a __Streamlit-based web application__ that allows users to compo
 6. __Real-Time Updates__: As new posts are submitted, the trending hashtags are updated instantly..
 7. __User-Friendly UI__: Streamlit ensures simplicity and ease of use.
 
+## Technologies Used
+  * __Streamlit__: Provides a simple and user-friendly web interface for users to write posts and view trending hashtags.
+  * __AWS Lambda__: Handles backend processing.
+      * __Insert Function__: Parses and stores hashtags from user posts in DynamoDB.
+      * __Fetch Function__: Analyzes stored hashtags and calculates trending ones.
+  * __AWS DynamoDB__: NoSQL database for storing posts and hashtags, ensuring scalability and fast querying..
+  * __AWS API Gateway__: Serves as the bridge between the front-end and backend Lambda functions.
+  * __Python__: The primary programming language for both the Streamlit app and Lambda functions.
+  * __Visual Studio Code__: Code editor for development.
+
 ## Architecture Diagram
 
 Below is the architecture diagram for the Social Media Hashtag Trend Analyzer project:
@@ -45,17 +55,7 @@ Walk through the project workflow step by step:
 
 ### 4. Display Results:
   * The Streamlit app displays the trending hashtags in real-time, sorted by frequency.
-
-## Technologies Used
-  * __Streamlit__: Provides a simple and user-friendly web interface for users to write posts and view trending hashtags.
-  * __AWS Lambda__: Handles backend processing.
-      * __Insert Function__: Parses and stores hashtags from user posts in DynamoDB.
-      * __Fetch Function__: Analyzes stored hashtags and calculates trending ones.
-  * __AWS DynamoDB__: NoSQL database for storing posts and hashtags, ensuring scalability and fast querying..
-  * __AWS API Gateway__: Serves as the bridge between the front-end and backend Lambda functions.
-  * __Python__: The primary programming language for both the Streamlit app and Lambda functions.
-  * __Visual Studio Code__: Code editor for development.
-    
+  
 ## Setup and Installation
 Follow these steps to set up the __Social Media Hashtag Trend Analyzer__  on local environment and deploy it to the cloud:
 
